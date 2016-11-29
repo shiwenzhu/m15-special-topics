@@ -10,15 +10,29 @@ library(modelr)
 library(tidyverse)
 
 # Initial view of the data with ggplot
-
+gapminder %>% 
+  ggplot(aes(x = year, y = lifeExp, group = country)) + 
+  geom_line(alpha = 1/3)
 
 # Look only at new zealand
+nz <- filter(gapminder, country == 'New Zealand')
+nz %>% 
+  ggplot(aes(x = year, y = lifeExp)) +
+  geom_line() +
+  ggtitle('Full data = ')
 
-
+nz.mod <- lm(lifeExp ~ year, data = nz)
 
 # Better yet, write your own function to accept a country as a parameter,
 # and produce the same graphics
-
+BuildLine <- function(c){
+  a <- filter(gapminder, country == c)
+  p <- a %>% 
+    ggplot(aes(x = year, y = lifeExp)) + 
+    geom_line() +
+    ggtitle(c)
+  return(p)
+}
 # Nest the data by country/continent
 
 
